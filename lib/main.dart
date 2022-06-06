@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'config.dart';
 
+/*
+ TODO : 0.0 → 0
+ TODO : =を連打した時の処理
+ TODO : +/- , %
+ TODO : 計算結果を画面上段に残す
+ TODO : 過去の計算結果を削除
+ TODO : 過去の計算結果を反映
+ TODO : ドラッグした時にテキストの周りに黒い影がつく
+ */
+
 void main() {
   runApp(const MyApp());
 }
@@ -28,11 +38,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-// 入力中の数字を表示
-double currentInputNum = 0;
+// 現在の数字を格納
+double currentNum = 0;
 
 // 演算中に前の数字を格納
 double beforeNum = 0;
+
+// 現在表示中の数字を格納
+double currentViewNum = 0;
 
 // 現在選択中の演算子を格納
 String currentOperator = "";
@@ -62,21 +75,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // 数字入力した時に現在の数字に反映する
     void _inputNum(int num){
       setState(() {
-        currentInputNum *= 10;
-        currentInputNum += num;
+        currentNum *= 10;
+        currentNum += num;
       });
     }
 
     // Cを押した時に現在入力されている数字をクリア
     void _clearCurrentNum(){
       setState(() {
-        currentInputNum = 0;
+        currentNum = 0;
       });
     }
 
     // ACを押した時に全ての値をクリア
     void _clearAllParameter(){
-      currentInputNum = 0;
+      currentNum = 0;
       beforeNum = 0;
       currentOperator = "";
       setState(() {});
@@ -85,27 +98,31 @@ class _MyHomePageState extends State<MyHomePage> {
     // 演算子を押した時に=が押された時のために各変数に値を格納しておく
     void _setOperator(String receiveOpe){
       currentOperator = receiveOpe;
-      beforeNum = currentInputNum;
-      currentInputNum = 0;
+      beforeNum = currentNum;
+      currentNum = 0;
     }
 
     // =が押された時に演算処理を実施
     void _executeCalc(){
       switch(currentOperator){
+        // 足し算
         case addition:
-          currentInputNum = beforeNum + currentInputNum;
+          currentNum = beforeNum + currentNum;
           setState(() {});
           break;
+        // 引き算
         case subtraction:
-          currentInputNum = beforeNum - currentInputNum;
+          currentNum = beforeNum - currentNum;
           setState(() {});
           break;
+        // 掛け算
         case multiplication:
-          currentInputNum = beforeNum * currentInputNum;
+          currentNum = beforeNum * currentNum;
           setState(() {});
           break;
+        // 割り算
         case division:
-          currentInputNum = beforeNum / currentInputNum;
+          currentNum = beforeNum / currentNum;
           setState(() {});
           break;
       }
@@ -121,15 +138,27 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: deviceHeight * 0.04,),
             // container 計算結果をおける場所
             SizedBox(height: deviceHeight * 0.20,),
-            Container(
-              width: deviceWidth * 0.23 * 4,
-              height: deviceHeight * 0.075,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(20)
+            Draggable(
+              child: Container(
+                width: deviceWidth * 0.23 * 4,
+                height: deviceHeight * 0.075,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                alignment: Alignment.centerRight,
+                child: Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
               ),
-              alignment: Alignment.centerRight,
-              child: Text(currentInputNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
+              feedback: Container(
+                width: deviceWidth * 0.23 * 4,
+                height: deviceHeight * 0.075,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                    borderRadius: BorderRadius.circular(20)
+                ),
+                alignment: Alignment.centerRight,
+                child: Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+              ),
             ),
             SizedBox(height : deviceWidth * 0.03,),
             // AC , +/- , % , C
