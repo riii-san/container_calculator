@@ -11,11 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'container calculator'),
     );
   }
 }
@@ -29,14 +28,88 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// 入力中の数字を表示
+double currentInputNum = 0;
+
+// 演算中に前の数字を格納
+double beforeNum = 0;
+
+// 現在選択中の演算子を格納
+String currentOperator = "";
+
+
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
 
+    // 足し算
+    const String addition = "addition";
+
+    // 引き算
+    const String subtraction = "subtraction";
+
+    // 掛け算
+    const String multiplication = "multiplication";
+
+    // 割り算
+    const String division = "division";
+
     // デバイスのサイズを定義
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
+
+    // 数字入力した時に現在の数字に反映する
+    void _inputNum(int num){
+      setState(() {
+        currentInputNum *= 10;
+        currentInputNum += num;
+      });
+    }
+
+    // Cを押した時に現在入力されている数字をクリア
+    void _clearCurrentNum(){
+      setState(() {
+        currentInputNum = 0;
+      });
+    }
+
+    // ACを押した時に全ての値をクリア
+    void _clearAllParameter(){
+      currentInputNum = 0;
+      beforeNum = 0;
+      currentOperator = "";
+      setState(() {});
+    }
+
+    // 演算子を押した時に=が押された時のために各変数に値を格納しておく
+    void _setOperator(String receiveOpe){
+      currentOperator = receiveOpe;
+      beforeNum = currentInputNum;
+      currentInputNum = 0;
+    }
+
+    // =が押された時に演算処理を実施
+    void _executeCalc(){
+      switch(currentOperator){
+        case addition:
+          currentInputNum = beforeNum + currentInputNum;
+          setState(() {});
+          break;
+        case subtraction:
+          currentInputNum = beforeNum - currentInputNum;
+          setState(() {});
+          break;
+        case multiplication:
+          currentInputNum = beforeNum * currentInputNum;
+          setState(() {});
+          break;
+        case division:
+          currentInputNum = beforeNum / currentInputNum;
+          setState(() {});
+          break;
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -56,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: BorderRadius.circular(20)
               ),
               alignment: Alignment.centerRight,
-              child: Text("数字が入ります   ")
+              child: Text(currentInputNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
             ),
             SizedBox(height : deviceWidth * 0.03,),
             // AC , +/- , % , C
@@ -67,7 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _clearAllParameter();
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -124,7 +199,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _clearCurrentNum();
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -149,7 +226,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(7);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -168,7 +247,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(8);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -187,7 +268,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(9);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -206,7 +289,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _setOperator(division);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -231,7 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(4);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -250,7 +337,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(5);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -269,7 +358,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(6);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -288,7 +379,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _setOperator(multiplication);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -313,7 +406,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(1);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -332,7 +427,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(2);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -351,7 +448,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(3);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -370,7 +469,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _setOperator(subtraction);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -395,7 +496,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _inputNum(0);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -433,7 +536,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _executeCalc();
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -452,7 +557,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width:  deviceWidth * 0.225,
                   height: deviceWidth * 0.225,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      _setOperator(addition);
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
