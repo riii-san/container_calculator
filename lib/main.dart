@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'config.dart';
 
@@ -50,6 +51,8 @@ double currentViewNum = 0;
 // 現在選択中の演算子を格納
 String currentOperator = "";
 
+String _acceptedData = '0.0   '; // 受け側のデータ
+
 
 class _MyHomePageState extends State<MyHomePage> {
 
@@ -67,6 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // 割り算
     const String division = "division";
+
+    var position = const Offset(0, 0);
 
     // デバイスのサイズを定義
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -137,8 +142,39 @@ class _MyHomePageState extends State<MyHomePage> {
             // 上段黒い枠までの部分
             SizedBox(height: deviceHeight * 0.04,),
             // container 計算結果をおける場所
-            SizedBox(height: deviceHeight * 0.20,),
+            //SizedBox(height: deviceHeight * 0.20,),
+            DragTarget<String>(
+              builder: (context, accepted, rejected) {
+                return SizedBox(
+                  width: deviceWidth,
+                  height: deviceHeight * 0.2,
+                  child: Container(
+                      width: deviceWidth * 0.75,
+                      height: deviceHeight * 0.05,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      alignment: Alignment.centerRight,
+                      child: Material(child: Text(_acceptedData,style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                  ),
+                );
+              },
+              onWillAccept: (data) {
+                print("aaa");
+                return true;
+              },
+              onAccept: (data) {
+                _acceptedData = data; // 受け側のデータ
+                setState(() {});
+                print(data);
+              },
+              onLeave: (data) {
+                print("ccc");
+              },
+            ),
             Draggable(
+              data: currentNum.toString() + '   ',
               child: Container(
                 width: deviceWidth * 0.23 * 4,
                 height: deviceHeight * 0.075,
@@ -150,14 +186,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
               ),
               feedback: Container(
-                width: deviceWidth * 0.23 * 4,
-                height: deviceHeight * 0.075,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                alignment: Alignment.centerRight,
-                child: Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                  width: deviceWidth * 0.75,
+                  height: deviceHeight * 0.05,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  alignment: Alignment.centerRight,
+                  child: Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
               ),
             ),
             SizedBox(height : deviceWidth * 0.03,),
