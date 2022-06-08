@@ -140,574 +140,560 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // 上段黒い枠までの部分
-            SizedBox(height: deviceHeight * 0.05,),
-            // 全削除ボタン
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                IconButton(onPressed: ()
-                    {
-                      setState(() {
-                        storeNum.clear();
-                      });
-                    },
-                    icon: const Icon(Icons.restore_from_trash_outlined,color: Colors.grey,)
-                ),
-                SizedBox(width: deviceWidth * 0.025,),
-              ],
-            ),
-            // container 計算結果をおける場所
-            DragTarget<String>(
-              builder: (context, accepted, rejected) {
-                return SizedBox(
-                  width: deviceWidth * 0.8,
-                  height: deviceHeight * 0.2,
-                  child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Flexible(
-                        child: ListView.builder(
-                          itemCount: storeNum.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Dismissible(
-                              key: UniqueKey(),
-                              child: (
-                                Column(
-                                  children: <Widget>[
-                                    Stack(
-                                      children: <Widget>[
-                                        Container(
-                                            width: deviceWidth * 0.8,
-                                            height: deviceHeight * 0.05,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: Colors.grey.shade400),
-                                                borderRadius: BorderRadius.circular(20)
-                                            ),
-                                            alignment: Alignment.centerRight,
-                                            child: Text(storeNum[index].num,style: const TextStyle(color: Colors.grey,fontSize: 18),)
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            SizedBox(width: deviceWidth * 0.05,),
-                                            Column(
-                                              children: <Widget>[
-                                                SizedBox(height: deviceHeight * 0.0125,),
-                                                SizedBox(
-                                                    width: deviceWidth * 0.7,
-                                                    height: deviceHeight * 0.025,
-                                                    child: TextField(
-                                                      style: const TextStyle(color: Colors.grey,fontSize: 16),
-                                                      controller: storeNum[index].valueController,
-                                                      decoration: const InputDecoration.collapsed(
-                                                        hintText: "",
-                                                        border: InputBorder.none,
-                                                      ),
-                                                    )
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: deviceHeight * 0.005,)
-                                  ],
-                                )
-                              ),
-                              onDismissed: (direction){
-                                setState(() {
-                                  storeNum.removeAt(index);
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                );
-              },
-              onAccept: (inputData) {
-                _data = new data();
-                _data?.num = inputData;
-                storeNum.add(_data!); // 受け側のデータ
-                currentNum = 0;
-                setState(() {});
-              },
-            ),
-            SizedBox(height: deviceHeight * 0.025,),
-            Draggable(
-              data: (currentNum - currentNum.toInt() == 0) ? currentNum.toInt().toString() + '   ' : currentNum.toString() + '   ',
-              child: Container(
-                width: deviceWidth * 0.23 * 4,
-                height: deviceHeight * 0.075,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20)
-                ),
-                alignment: Alignment.centerRight,
-                child: (currentNum - currentNum.toInt() == 0) ? Text(currentNum.toInt().toString() + '   ',style: const TextStyle(fontSize: 24),) : Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
+        child: SingleChildScrollView(
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // 上段黒い枠までの部分
+              SizedBox(height: deviceHeight * 0.05,),
+              // 全削除ボタン
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(onPressed: ()
+                      {
+                        setState(() {
+                          storeNum.clear();
+                        });
+                      },
+                      icon: const Icon(Icons.restore_from_trash_outlined,color: Colors.grey,)
+                  ),
+                  SizedBox(width: deviceWidth * 0.025,),
+                ],
               ),
-              feedback: Container(
-                  width: deviceWidth * 0.75,
-                  height: deviceHeight * 0.05,
+              // container 計算結果をおける場所
+              DragTarget<String>(
+                builder: (context, accepted, rejected) {
+                  return SizedBox(
+                    width: deviceWidth * 0.8,
+                    height: deviceHeight * 0.2,
+                    child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: ListView.builder(
+                            itemCount: storeNum.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Dismissible(
+                                key: UniqueKey(),
+                                child: (
+                                  Column(
+                                    children: <Widget>[
+                                      Stack(
+                                        children: <Widget>[
+                                          Container(
+                                              width: deviceWidth * 0.8,
+                                              height: deviceHeight * 0.05,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey.shade400),
+                                                  borderRadius: BorderRadius.circular(20)
+                                              ),
+                                              alignment: Alignment.centerRight,
+                                              child: Text(storeNum[index].num,style: const TextStyle(color: Colors.grey,fontSize: 18),)
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              SizedBox(width: deviceWidth * 0.05,),
+                                              Column(
+                                                children: <Widget>[
+                                                  SizedBox(height: deviceHeight * 0.0125,),
+                                                  SizedBox(
+                                                      width: deviceWidth * 0.7,
+                                                      height: deviceHeight * 0.025,
+                                                      child: TextField(
+                                                        style: const TextStyle(color: Colors.grey,fontSize: 16),
+                                                        controller: storeNum[index].valueController,
+                                                        decoration: const InputDecoration.collapsed(
+                                                          hintText: "",
+                                                          border: InputBorder.none,
+                                                        ),
+                                                      )
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: deviceHeight * 0.005,)
+                                    ],
+                                  )
+                                ),
+                                onDismissed: (direction){
+                                  setState(() {
+                                    storeNum.removeAt(index);
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  );
+                },
+                onAccept: (inputData) {
+                  _data = new data();
+                  _data?.num = inputData;
+                  storeNum.add(_data!); // 受け側のデータ
+                  currentNum = 0;
+                  setState(() {});
+                },
+              ),
+              SizedBox(height: deviceHeight * 0.025,),
+              Draggable(
+                data: (currentNum - currentNum.toInt() == 0) ? currentNum.toInt().toString() + '   ' : currentNum.toString() + '   ',
+                child: Container(
+                  width: deviceWidth * 0.23 * 4,
+                  height: deviceHeight * 0.075,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(20)
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20)
                   ),
                   alignment: Alignment.centerRight,
-                  child: (currentNum - currentNum.toInt() == 0) ? Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),)) : Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                  child: (currentNum - currentNum.toInt() == 0) ? Text(currentNum.toInt().toString() + '   ',style: const TextStyle(fontSize: 24),) : Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
+                ),
+                feedback: Container(
+                    width: deviceWidth * 0.75,
+                    height: deviceHeight * 0.05,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(20)
+                    ),
+                    alignment: Alignment.centerRight,
+                    child: (currentNum - currentNum.toInt() == 0) ? Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),)) : Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                ),
               ),
-            ),
-            SizedBox(height : deviceWidth * 0.03,),
-            // AC , +/- , % , C
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _clearAllParameter();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.blue
+              SizedBox(height : deviceWidth * 0.03,),
+              // AC , +/- , % , C
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _clearAllParameter();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          primary: Colors.blue.shade300
+                      ),
+                      child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.blue
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){},
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          primary: Colors.blue.shade300
+                      ),
+                      child: const Text('+/-',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('+/-',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.blue
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){},
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          primary: Colors.blue.shade300
+                      ),
+                      child: const Text('%',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('%',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _clearCurrentNum();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.blue
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _clearCurrentNum();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          primary: Colors.blue.shade300
+                      ),
+                      child: const Text('C',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('C',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height : deviceWidth * 0.01,),
-            // 7 , 8 , 9 , ÷
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(7);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                ],
+              ),
+              SizedBox(height : deviceWidth * 0.01,),
+              // 7 , 8 , 9 , ÷
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(7);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('7',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('7',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(8);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(8);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('8',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('8',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(9);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(9);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('9',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('9',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _setOperator(division);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.indigo
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _setOperator(division);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.indigo
+                      ),
+                      child: const Text('÷',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('÷',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height : deviceWidth * 0.01,),
-            // 4 , 5 , 6 , ×
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(4);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                ],
+              ),
+              SizedBox(height : deviceWidth * 0.01,),
+              // 4 , 5 , 6 , ×
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(4);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('4',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('4',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(5);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(5);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('5',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('5',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(6);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(6);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('6',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('6',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _setOperator(multiplication);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.indigo
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _setOperator(multiplication);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.indigo
+                      ),
+                      child: const Text('×',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('×',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height : deviceWidth * 0.01,),
-            // 1 , 2 , 3 , -
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(1);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                ],
+              ),
+              SizedBox(height : deviceWidth * 0.01,),
+              // 1 , 2 , 3 , -
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(1);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('1',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('1',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(2);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(2);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('2',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('2',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(3);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(3);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('3',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('3',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _setOperator(subtraction);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.indigo
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _setOperator(subtraction);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.indigo
+                      ),
+                      child: const Text('-',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('-',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height : deviceWidth * 0.01,),
-            // 0 , . , = , +
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _inputNum(0);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                ],
+              ),
+              SizedBox(height : deviceWidth * 0.01,),
+              // 0 , . , = , +
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _inputNum(0);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('0',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('0',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){},
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('.',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('.',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _executeCalc();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.white
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _executeCalc();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.white
+                      ),
+                      child: const Text('=',style: TextStyle(color: Colors.black,fontSize: 20),),
                     ),
-                    child: const Text('=',style: TextStyle(color: Colors.black,fontSize: 20),),
                   ),
-                ),
-                SizedBox(width: deviceWidth * 0.01,),
-                SizedBox(
-                  width:  deviceWidth * 0.225,
-                  height: deviceWidth * 0.225,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _setOperator(addition);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        side: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.25
-                        ),
-                        primary: Colors.indigo
+                  SizedBox(width: deviceWidth * 0.01,),
+                  SizedBox(
+                    width:  deviceWidth * 0.225,
+                    height: deviceWidth * 0.225,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        _setOperator(addition);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          side: const BorderSide(
+                              color: Colors.grey,
+                              width: 0.25
+                          ),
+                          primary: Colors.indigo
+                      ),
+                      child: const Text('+',style: TextStyle(color: Colors.white,fontSize: 20),),
                     ),
-                    child: const Text('+',style: TextStyle(color: Colors.white,fontSize: 20),),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
