@@ -1,15 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'config.dart';
+import 'data.class.dart';
 
 /*
- TODO : 0.0 → 0
+ TODO : 0.0 → 0 一次対策のみ完了
  TODO : =を連打した時の処理
  TODO : +/- , %
- TODO : 計算結果を画面上段に残す
  TODO : 過去の計算結果を削除
  TODO : 過去の計算結果を反映
- TODO : ドラッグした時にテキストの周りに黒い影がつく
+ TODO : ゴリ押ししているレイアウトを修正
  */
 
 void main() {
@@ -52,7 +50,10 @@ double currentViewNum = 0;
 String currentOperator = "";
 
 // 保存している数字を格納
-List<String> storeNum = [];
+List<data> storeNum = [];
+
+// dataクラスのインスタンス
+data? _data;
 
 
 
@@ -140,40 +141,88 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // 上段黒い枠までの部分
-            SizedBox(height: deviceHeight * 0.04,),
+            SizedBox(height: deviceHeight * 0.05,),
+            // 全削除ボタン
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                IconButton(onPressed: ()
+                    {
+                      setState(() {
+                        storeNum.clear();
+                      });
+                    },
+                    icon: const Icon(Icons.restore_from_trash_outlined,color: Colors.grey,)
+                ),
+                SizedBox(width: deviceWidth * 0.025,),
+              ],
+            ),
             // container 計算結果をおける場所
-            //SizedBox(height: deviceHeight * 0.20,),
             DragTarget<String>(
               builder: (context, accepted, rejected) {
                 return SizedBox(
                   width: deviceWidth * 0.8,
                   height: deviceHeight * 0.2,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Flexible(
                         child: ListView.builder(
                           itemCount: storeNum.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return (
-                              Column(
-                                children: <Widget>[
-                                  Container(
-                                      width: deviceWidth * 0.8,
-                                      height: deviceHeight * 0.05,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey),
-                                          borderRadius: BorderRadius.circular(20)
-                                      ),
-                                      alignment: Alignment.centerRight,
-                                      child: Text(storeNum[index],style: const TextStyle(color: Colors.grey,fontSize: 18),)
-                                  ),
-                                  SizedBox(height: deviceHeight * 0.005,)
-                                ],
-                              )
+                            return Dismissible(
+                              key: UniqueKey(),
+                              child: (
+                                Column(
+                                  children: <Widget>[
+                                    Stack(
+                                      children: <Widget>[
+                                        Container(
+                                            width: deviceWidth * 0.8,
+                                            height: deviceHeight * 0.05,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.grey.shade400),
+                                                borderRadius: BorderRadius.circular(20)
+                                            ),
+                                            alignment: Alignment.centerRight,
+                                            child: Text(storeNum[index].num,style: const TextStyle(color: Colors.grey,fontSize: 18),)
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            SizedBox(width: deviceWidth * 0.05,),
+                                            Column(
+                                              children: <Widget>[
+                                                SizedBox(height: deviceHeight * 0.0125,),
+                                                SizedBox(
+                                                    width: deviceWidth * 0.7,
+                                                    height: deviceHeight * 0.025,
+                                                    child: TextField(
+                                                      style: const TextStyle(color: Colors.grey,fontSize: 16),
+                                                      controller: storeNum[index].valueController,
+                                                      decoration: const InputDecoration.collapsed(
+                                                        hintText: "",
+                                                        border: InputBorder.none,
+                                                      ),
+                                                    )
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: deviceHeight * 0.005,)
+                                  ],
+                                )
+                              ),
+                              onDismissed: (direction){
+                                setState(() {
+                                  storeNum.removeAt(index);
+                                });
+                              },
                             );
                           },
                         ),
@@ -182,11 +231,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 );
               },
-              onAccept: (data) {
-                storeNum.add(data); // 受け側のデータ
+              onAccept: (inputData) {
+                _data = new data();
+                _data?.num = inputData;
+                storeNum.add(_data!); // 受け側のデータ
                 currentNum = 0;
                 setState(() {});
-                print(data);
               },
             ),
             SizedBox(height: deviceHeight * 0.025,),
@@ -210,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(20)
                   ),
                   alignment: Alignment.centerRight,
-                  child: (currentNum - currentNum.toInt() == 0) ? Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),)) : Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                  child: (currentNum - currentNum.toInt() == 0) ? Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),)) : Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
               ),
             ),
             SizedBox(height : deviceWidth * 0.03,),
