@@ -51,7 +51,10 @@ double currentViewNum = 0;
 // 現在選択中の演算子を格納
 String currentOperator = "";
 
-String _acceptedData = '0.0   '; // 受け側のデータ
+// 保存している数字を格納
+List<String> storeNum = [];
+
+
 
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -71,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // 割り算
     const String division = "division";
 
-    var position = const Offset(0, 0);
+    //var position = const Offset(0, 0);
 
     // デバイスのサイズを定義
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -146,35 +149,49 @@ class _MyHomePageState extends State<MyHomePage> {
             DragTarget<String>(
               builder: (context, accepted, rejected) {
                 return SizedBox(
-                  width: deviceWidth,
+                  width: deviceWidth * 0.8,
                   height: deviceHeight * 0.2,
-                  child: Container(
-                      width: deviceWidth * 0.75,
-                      height: deviceHeight * 0.05,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(20)
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Flexible(
+                        child: ListView.builder(
+                          itemCount: storeNum.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return (
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                      width: deviceWidth * 0.8,
+                                      height: deviceHeight * 0.05,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey),
+                                          borderRadius: BorderRadius.circular(20)
+                                      ),
+                                      alignment: Alignment.centerRight,
+                                      child: Text(storeNum[index],style: const TextStyle(color: Colors.grey,fontSize: 18),)
+                                  ),
+                                  SizedBox(height: deviceHeight * 0.005,)
+                                ],
+                              )
+                            );
+                          },
+                        ),
                       ),
-                      alignment: Alignment.centerRight,
-                      child: Material(child: Text(_acceptedData,style: const TextStyle(color: Colors.grey,fontSize: 24),))
-                  ),
+                    ],
+                  )
                 );
               },
-              onWillAccept: (data) {
-                print("aaa");
-                return true;
-              },
               onAccept: (data) {
-                _acceptedData = data; // 受け側のデータ
+                storeNum.add(data); // 受け側のデータ
+                currentNum = 0;
                 setState(() {});
                 print(data);
               },
-              onLeave: (data) {
-                print("ccc");
-              },
             ),
+            SizedBox(height: deviceHeight * 0.025,),
             Draggable(
-              data: currentNum.toString() + '   ',
+              data: (currentNum - currentNum.toInt() == 0) ? currentNum.toInt().toString() + '   ' : currentNum.toString() + '   ',
               child: Container(
                 width: deviceWidth * 0.23 * 4,
                 height: deviceHeight * 0.075,
@@ -183,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.circular(20)
                 ),
                 alignment: Alignment.centerRight,
-                child: Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
+                child: (currentNum - currentNum.toInt() == 0) ? Text(currentNum.toInt().toString() + '   ',style: const TextStyle(fontSize: 24),) : Text(currentNum.toString() + '   ',style: const TextStyle(fontSize: 24),)
               ),
               feedback: Container(
                   width: deviceWidth * 0.75,
@@ -193,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(20)
                   ),
                   alignment: Alignment.centerRight,
-                  child: Material(child: Text(currentNum.toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
+                  child: (currentNum - currentNum.toInt() == 0) ? Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),)) : Material(child: Text(currentNum.toInt().toString() + '   ',style: const TextStyle(color: Colors.grey,fontSize: 24),))
               ),
             ),
             SizedBox(height : deviceWidth * 0.03,),
