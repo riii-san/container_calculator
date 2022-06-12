@@ -139,8 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -233,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 onAccept: (inputData) {
-                  _data = new data();
+                  _data = data();
                   _data?.num = inputData;
                   storeNum.add(_data!); // 受け側のデータ
                   currentNum = 0;
