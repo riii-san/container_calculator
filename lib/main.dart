@@ -178,7 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(0);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -194,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // .ボタン
+          // .ボタン TODO : ボタン押された時の処理実装
           Container(
             child: Positioned(
               top: _deviceHeight - _containerSize - _bannerHeight,
@@ -203,7 +205,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -228,7 +232,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _executeCalc();
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -253,7 +259,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _setOperator("addition");
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -278,7 +286,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(1);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -303,7 +313,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(2);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -328,7 +340,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(3);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -353,7 +367,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _setOperator("subtraction");
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -378,7 +394,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(4);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -403,7 +421,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(5);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -428,7 +448,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(6);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -453,7 +475,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _setOperator("multiplication");
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -478,7 +502,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(7);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -503,7 +529,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(8);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -528,7 +556,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _inputNum(9);
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -553,7 +583,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _setOperator("division");
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -578,7 +610,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _clearAllParameter();
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -594,7 +628,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // +/-ボタン
+          // +/-ボタン TODO : ボタン押された時の処理実装
           Container(
             child: Positioned(
               top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
@@ -619,7 +653,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // %ボタン
+          // %ボタン TODO : ボタン押された時の処理実装
           Container(
             child: Positioned(
               top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
@@ -653,7 +687,9 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _containerSize,
               child: SizedBox(
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    _clearCurrentNum();
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -676,17 +712,14 @@ class _MyHomePageState extends State<MyHomePage> {
               left: _sideSpace,
               width: _containerSize * 4 + _space * 3,
               height: _containerSize * 0.7,
-              child: SizedBox(
-                child: ElevatedButton(
-                  onPressed: (){},
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      primary: Colors.blue.shade300
-                  ),
-                  child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
+              child: Container(
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerRight,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: Text(currentNum.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
               ),
             ),
           ),
