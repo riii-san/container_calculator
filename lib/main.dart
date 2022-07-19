@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
     void initState(){
       super.initState();
     }
+
     // 数字入力した時に現在の数字に反映する
     void _inputNum(int num){
       setState(() {
@@ -165,429 +166,532 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
 
-    return Stack(
-      children: <Widget>[
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
-            left: _sideSpace,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          // 0
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize - _bannerHeight,
+              left: _sideSpace,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('0',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
-            left: _sideSpace + _space * 1 + _containerSize * 1,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // .ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize - _bannerHeight,
+              left: _sideSpace + _space * 1 + _containerSize * 1,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('.',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
-            left: _sideSpace + _space * 2 + _containerSize * 2,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // =ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize - _bannerHeight,
+              left: _sideSpace + _space * 2 + _containerSize * 2,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('=',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
-            left: _sideSpace + _space * 3 + _containerSize * 3,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // +ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize - _bannerHeight,
+              left: _sideSpace + _space * 3 + _containerSize * 3,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.indigo
+                  ),
+                  child: const Text('+',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
-            left: _sideSpace,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 1ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+              left: _sideSpace,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('1',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
-            left: _sideSpace + _space * 1 + _containerSize * 1,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 2ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+              left: _sideSpace + _space * 1 + _containerSize * 1,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('2',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
-            left: _sideSpace + _space * 2 + _containerSize * 2,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 3ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+              left: _sideSpace + _space * 2 + _containerSize * 2,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('3',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
-            left: _sideSpace + _space * 3 + _containerSize * 3,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // -ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+              left: _sideSpace + _space * 3 + _containerSize * 3,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.indigo
+                  ),
+                  child: const Text('-',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
-            left: _sideSpace,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 4ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+              left: _sideSpace,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('4',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
-            left: _sideSpace + _space * 1 + _containerSize * 1,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 5ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+              left: _sideSpace + _space * 1 + _containerSize * 1,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('5',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
-            left: _sideSpace + _space * 2 + _containerSize * 2,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 6ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+              left: _sideSpace + _space * 2 + _containerSize * 2,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('6',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
-            left: _sideSpace + _space * 3 + _containerSize * 3,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // ×ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+              left: _sideSpace + _space * 3 + _containerSize * 3,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.indigo
+                  ),
+                  child: const Text('×',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
-            left: _sideSpace,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 7ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+              left: _sideSpace,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('7',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
-            left: _sideSpace + _space * 1 + _containerSize * 1,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 8ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+              left: _sideSpace + _space * 1 + _containerSize * 1,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('8',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
-            left: _sideSpace + _space * 2 + _containerSize * 2,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // 9ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+              left: _sideSpace + _space * 2 + _containerSize * 2,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.white
+                  ),
+                  child: const Text('9',style: TextStyle(color: Colors.black,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
-            left: _sideSpace + _space * 3 + _containerSize * 3,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // ÷ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+              left: _sideSpace + _space * 3 + _containerSize * 3,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.indigo
+                  ),
+                  child: const Text('÷',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
-            left: _sideSpace,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // ACボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+              left: _sideSpace,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.blue.shade300
+                  ),
+                  child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
-            left: _sideSpace + _space * 1 + _containerSize * 1,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // +/-ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+              left: _sideSpace + _space * 1 + _containerSize * 1,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.blue.shade300
+                  ),
+                  child: const Text('+/-',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
-            left: _sideSpace + _space * 2 + _containerSize * 2,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // %ボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+              left: _sideSpace + _space * 2 + _containerSize * 2,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.blue.shade300
+                  ),
+                  child: const Text('%',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
-            left: _sideSpace + _space * 3 + _containerSize * 3,
-            width: _containerSize,
-            height: _containerSize,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // Cボタン
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+              left: _sideSpace + _space * 3 + _containerSize * 3,
+              width: _containerSize,
+              height: _containerSize,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      side: const BorderSide(
+                          color: Colors.grey,
+                          width: 0.25
+                      ),
+                      primary: Colors.blue.shade300
+                  ),
+                  child: const Text('C',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-        Container(
-          child: Positioned(
-            top: _deviceHeight - _containerSize * 5.7 - _bannerHeight - _space * 5,
-            left: _sideSpace,
-            width: _containerSize * 4 + _space * 3,
-            height: _containerSize * 0.7,
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    primary: Colors.blue.shade300
+          // ボタンを押下した結果を格納するコンテナ
+          Container(
+            child: Positioned(
+              top: _deviceHeight - _containerSize * 5.7 - _bannerHeight - _space * 5,
+              left: _sideSpace,
+              width: _containerSize * 4 + _space * 3,
+              height: _containerSize * 0.7,
+              child: SizedBox(
+                child: ElevatedButton(
+                  onPressed: (){},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      primary: Colors.blue.shade300
+                  ),
+                  child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
