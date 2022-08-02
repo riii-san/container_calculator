@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data.class.dart';
+import 'config.dart';
 
 /*
  TODO : 0.0 → 0 一次対策のみ完了
@@ -48,6 +49,12 @@ double currentViewNum = 0;
 
 // 現在選択中の演算子を格納
 String currentOperator = "";
+
+// フリー座標の個別インスタンス
+Cont? _cont;
+
+// debug
+List<Cont> tempList = [];
 
 // 保存している数字を格納
 List<data> storeNum = [];
@@ -169,6 +176,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          // 計算結果保存領域
+          Positioned(
+            top: _containerSize * 3.5,
+            left: 0,
+            width: _deviceWidth,
+            height: _deviceHeight * 0.7,
+            child: DragTarget(builder: (context, candidateData, rejectedData) {
+              return Container(
+                // TODO : 塗りつぶし消す
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.greenAccent),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.withOpacity(0.5)
+                ),
+              );
+            }),
+          ),
           // 0
           Positioned(
             top: _deviceHeight - _containerSize - _bannerHeight,
@@ -694,51 +718,59 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(currentNum.toString(),style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
                 ),
               ),
-              onDragCompleted: (){
-                print("入った");
+              onDraggableCanceled: (view,offset){
+                _cont = Cont(offset,currentNum);
+                tempList.add(_cont!);
+                print(tempList.length);
+                setState(() {});
               },
             ),
           ),
-          Positioned(
-            top: _containerSize * 0.5,
-            left: 0,
-            width: _deviceWidth,
-            height: _deviceHeight * 0.27,
-            child: DragTarget(builder: (context, candidateData, rejectedData) {
-              return Container(
-                // TODO : 塗りつぶし消す
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.greenAccent),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey.withOpacity(0.5)
+
+          // 保存した結果を表示する領域
+          for(int j = 0; j < tempList.length; j++)
+            Positioned(
+              // TODO : ドラック&ドロップした座標を入力
+              left: tempList[j].pos.dx,
+              top: tempList[j].pos.dy,
+              child: Draggable(
+                feedback: Material(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white
+                    ),
+                    width: _containerSize * 4 + _space * 3,
+                    height: _containerSize * 0.7,
+                    child: Text(tempList[j].num.toString(),style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
+                  ),
                 ),
-              );
-            }),
-          )
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(10),
+                      color: Colors.white
+                  ),
+                  width: _containerSize * 4 + _space * 3,
+                  height: _containerSize * 0.7,
+                  child: Text(tempList[j].num.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
+                ),
+                childWhenDragging: Container(),
+                // 追加部分
+                onDraggableCanceled: (view, offset) {
+                  setState(() {
+                    tempList[j].pos = offset;
+                  });
+                },
+              ),
+            ),
         ],
       ),
     );
   }
-}
-
-Widget returnCalcButton(String character,int j){
-  i++;
-  return Positioned(
-    top: _deviceHeight - _containerSize - _bannerHeight,
-    left: _sideSpace + _space * i + _containerSize * i,
-    width: _containerSize,
-    height: _containerSize,
-    child: SizedBox(
-      child: ElevatedButton(
-        onPressed: (){},
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-            ),
-            primary: Colors.blue.shade300
-        ),
-        child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
-      ),
-    ),
-  );
 }
