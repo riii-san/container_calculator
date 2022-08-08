@@ -53,18 +53,20 @@ String currentOperator = "";
 // フリー座標の個別インスタンス
 Cont? _cont;
 
+// コンテナドラッグ中に一時的に保存するContクラスのインスタンス
+Cont? _tempCont;
+
+// コンテナドラッグ中に選択したlistの要素数を格納する番号
+int currentSelectArrayNum = 0;
+
 // debug
 List<Cont> tempList = [];
 
 // 保存している数字を格納
 List<data> storeNum = [];
 
-// dataクラスのインスタンス
-data? _data;
-
 // ループ変数
 int i = 0;
-
 
 // デバイスの横サイズ
 late double _deviceWidth;
@@ -79,8 +81,12 @@ late double _space;
 // コンテナ一番サイドのスペース
 late double _sideSpace;
 
+// ドラッグ中かどうかを判定するフラグ
+bool dragFlg = false;
+
 // containerButton要素を格納するリスト
-List<String> containerButtonCharacter = ['0','.','=','+'];
+List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5','6','*','7','8','9','÷','AC','+/-','％','C'];
+
 
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -176,23 +182,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // 計算結果保存領域
-          Positioned(
-            top: _containerSize * 3.5,
-            left: 0,
-            width: _deviceWidth,
-            height: _deviceHeight * 0.7,
-            child: DragTarget(builder: (context, candidateData, rejectedData) {
-              return Container(
-                // TODO : 塗りつぶし消す
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.greenAccent),
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.withOpacity(0.5)
-                ),
-              );
-            }),
-          ),
           // 0
           Positioned(
             top: _deviceHeight - _containerSize - _bannerHeight,
@@ -718,14 +707,45 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(currentNum.toString(),style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
                 ),
               ),
+              // ドラッグ開始
+              onDragStarted: (){
+                dragFlg = true;
+                setState(() {});
+              },
+              // ドラッグターゲットに置いたとき
+              onDragCompleted: (){
+                dragFlg = false;
+                setState(() {});
+              },
+              // ドラッグターゲット以外に置いたとき、すなわち画面上段の何もないゾーン
               onDraggableCanceled: (view,offset){
+                dragFlg = false;
                 _cont = Cont(offset,currentNum);
                 tempList.add(_cont!);
-                print(tempList.length);
                 setState(() {});
               },
             ),
           ),
+
+          // 計算結果保存領域
+          // ドラッグ中のみオン
+          dragFlg ?
+            Positioned(
+              top: _containerSize * 3.5,
+              left: 0,
+              width: _deviceWidth,
+              height: _deviceHeight * 0.7,
+              child: DragTarget(builder: (context, accepted, rejected) {
+                return Container(
+                  // TODO : 塗りつぶし消す
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.greenAccent),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.5)),
+                );
+              }),
+            )
+          : Container(),
 
           // 保存した結果を表示する領域
           for(int j = 0; j < tempList.length; j++)
@@ -761,10 +781,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(tempList[j].num.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
                 ),
                 childWhenDragging: Container(),
-                // 追加部分
+                // TODO : ドラッグ&ドロップで選択したリスト要素の前のコンテナが消えてしまう
+                // ドラッグ開始
+                onDragStarted: (){
+                  setState(() {
+                    currentSelectArrayNum = j;
+                    dragFlg = true;
+                    _tempCont = tempList[j];
+                  });
+                },
+                // DragTargetに置かれた場合は元の位置に戻す
+                onDragCompleted: (){
+                  setState(() {
+                    tempList.removeAt(currentSelectArrayNum);
+                    tempList.add(_tempCont!);
+                    dragFlg = false;
+                  });
+                },
+                // DragTarget以外に置かれた場合、その座標に移動
                 onDraggableCanceled: (view, offset) {
                   setState(() {
-                    tempList[j].pos = offset;
+                    tempList.removeAt(currentSelectArrayNum);
+                    tempList.add(_tempCont!);
+                    tempList[tempList.length-1].pos = offset;
+                    dragFlg = false;
                   });
                 },
               ),
