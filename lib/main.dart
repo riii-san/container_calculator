@@ -92,6 +92,11 @@ List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5'
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
+  void initState(){
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     // 足し算
@@ -117,11 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _space = _deviceWidth * 0.025;
     // コンテナ一番サイドのスペース
     _sideSpace = _deviceWidth * 0.125 / 2;
-
-    @override
-    void initState(){
-      super.initState();
-    }
 
     // 数字入力した時に現在の数字に反映する
     void _inputNum(int num){
@@ -685,6 +685,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: _containerSize * 4 + _space * 3,
             height: _containerSize * 0.7,
             child: Draggable(
+              data: 0,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 alignment: Alignment.centerRight,
@@ -709,20 +710,24 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // ドラッグ開始
               onDragStarted: (){
-                dragFlg = true;
-                setState(() {});
+                setState(() {
+                  dragFlg = true;
+                });
               },
               // ドラッグターゲットに置いたとき
               onDragCompleted: (){
-                dragFlg = false;
-                setState(() {});
+                setState(() {
+                  dragFlg = false;
+                });
               },
-              // ドラッグターゲット以外に置いたとき、すなわち画面上段の何もないゾーン
+              // ドラッグターゲット以外に置いたとき、すなわち画面上段の計算結果保存領域
               onDraggableCanceled: (view,offset){
-                dragFlg = false;
-                _cont = Cont(offset,currentNum);
-                tempList.add(_cont!);
-                setState(() {});
+                setState(() {
+                  dragFlg = false;
+                  _cont = Cont(offset,currentNum);
+                  tempList.add(_cont!);
+                  currentNum = 0;
+                });
               },
             ),
           ),
@@ -731,7 +736,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // ドラッグ中のみオン
           dragFlg ?
             Positioned(
-              top: _containerSize * 3.5,
+              top: _containerSize * 4.5,
               left: 0,
               width: _deviceWidth,
               height: _deviceHeight * 0.7,
@@ -747,13 +752,40 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           : Container(),
 
+          // 現在の計算結果を格納するコンテナ
+          dragFlg ?
+            Positioned(
+              top: _containerSize * 3.75,
+              left: _sideSpace,
+              width: _containerSize * 4 + _space * 3,
+              height: _containerSize * 0.7,
+              child: DragTarget<Cont>(builder: (context, accepted, rejected) {
+                return Container(
+                  // TODO : 塗りつぶし消す
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.greenAccent),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.5)),
+                );
+              },
+                onAccept: (data){
+                  setState(() {
+                    currentNum = data.num;
+                    tempList.removeAt(tempList.length-1);
+                    _executeCalc();
+                  });
+                },
+              ),
+            )
+              : Container(),
+
           // 保存した結果を表示する領域
           for(int j = 0; j < tempList.length; j++)
             Positioned(
-              // TODO : ドラック&ドロップした座標を入力
               left: tempList[j].pos.dx,
               top: tempList[j].pos.dy,
               child: Draggable(
+                data: tempList[j],
                 feedback: Material(
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -781,28 +813,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(tempList[j].num.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
                 ),
                 childWhenDragging: Container(),
-                // TODO : ドラッグ&ドロップで選択したリスト要素の前のコンテナが消えてしまう
                 // ドラッグ開始
                 onDragStarted: (){
                   setState(() {
+                    // ドラッグ中にデータが最新の入力した数字が消えないように値挿入
+                    currentNum = beforeNum;
+                    // リストの一番後ろに持ってくる
                     currentSelectArrayNum = j;
-                    dragFlg = true;
                     _tempCont = tempList[j];
+                    tempList.removeAt(currentSelectArrayNum);
+                    tempList.add(_tempCont!);
+                    dragFlg = true;
                   });
                 },
                 // DragTargetに置かれた場合は元の位置に戻す
                 onDragCompleted: (){
                   setState(() {
-                    tempList.removeAt(currentSelectArrayNum);
-                    tempList.add(_tempCont!);
                     dragFlg = false;
                   });
                 },
                 // DragTarget以外に置かれた場合、その座標に移動
                 onDraggableCanceled: (view, offset) {
                   setState(() {
-                    tempList.removeAt(currentSelectArrayNum);
-                    tempList.add(_tempCont!);
                     tempList[tempList.length-1].pos = offset;
                     dragFlg = false;
                   });
