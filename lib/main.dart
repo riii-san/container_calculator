@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
     void _setOperator(String receiveOpe){
       currentOperator = receiveOpe;
       beforeNum = currentNum;
-      currentNum = 0;
+      //currentNum = 0;
     }
 
     // =が押された時に演算処理を実施
@@ -678,6 +678,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+
           // ボタンを押下した結果を格納するコンテナ
           Positioned(
             top: _deviceHeight - _containerSize * 5.7 - _bannerHeight - _space * 5,
@@ -732,7 +733,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
 
-          // 計算結果保存領域
+          // 各ボタン配置ゾーン
           // ドラッグ中のみオン
           dragFlg ?
             Positioned(
@@ -771,13 +772,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 onAccept: (data){
                   setState(() {
                     currentNum = data.num;
-                    tempList.removeAt(tempList.length-1);
+                    tempList.removeAt(currentSelectArrayNum);
                     _executeCalc();
                   });
                 },
               ),
+
             )
               : Container(),
+
+
+
 
           // 保存した結果を表示する領域
           for(int j = 0; j < tempList.length; j++)
@@ -815,14 +820,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 childWhenDragging: Container(),
                 // ドラッグ開始
                 onDragStarted: (){
+                  // リストの一番後ろに持ってくる
+                  currentSelectArrayNum = j;
+                  _tempCont = tempList[j];
                   setState(() {
-                    // ドラッグ中にデータが最新の入力した数字が消えないように値挿入
-                    currentNum = beforeNum;
-                    // リストの一番後ろに持ってくる
-                    currentSelectArrayNum = j;
-                    _tempCont = tempList[j];
-                    tempList.removeAt(currentSelectArrayNum);
-                    tempList.add(_tempCont!);
                     dragFlg = true;
                   });
                 },
@@ -835,7 +836,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // DragTarget以外に置かれた場合、その座標に移動
                 onDraggableCanceled: (view, offset) {
                   setState(() {
-                    tempList[tempList.length-1].pos = offset;
+                    tempList[currentSelectArrayNum].pos = offset;
                     dragFlg = false;
                   });
                 },
