@@ -92,7 +92,7 @@ late double _sideSpace;
 bool dragFlg = false;
 
 // containerButton要素を格納するリスト
-List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5','6','*','7','8','9','÷','AC','+/-','％','C'];
+List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5','6','*','7','8','9','÷','AC','√','％','C'];
 
 
 
@@ -141,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Cを押した時に現在入力されている数字をクリア
     void _clearCurrentNum(){
       setState(() {
+        beforeNum = 0;
         currentNum = 0;
       });
     }
@@ -155,7 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // 演算子を押した時に=が押された時のために各変数に値を格納しておく
     void _setOperator(String receiveOpe){
-      currentOperator = receiveOpe;
+      setState(() {
+        currentOperator = receiveOpe;
+      });
       beforeNum = currentNum;
       currentNum = 0;
     }
@@ -273,8 +276,9 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator("addition");
-                },
+                  _setOperator(addition);
+                  },
+                // 未選択状態
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
@@ -286,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     primary: Colors.indigo
                 ),
                 child: const Text('+',style: TextStyle(color: Colors.white,fontSize: 20),),
-              ),
+              )
             ),
           ),
           // 1ボタン
@@ -373,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator("subtraction");
+                  _setOperator(subtraction);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -473,7 +477,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator("multiplication");
+                  _setOperator(multiplication);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -573,7 +577,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator("division");
+                  _setOperator(division);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -757,7 +761,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey.withOpacity(0.5)),
                 );
-              }),
+              },
+              ),
             )
           : Container(),
 
@@ -826,9 +831,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ドラッグ開始
                 onDragStarted: (){
                   currentSelectArrayNum = j;
-                  if(currentOperator != ""){
-                    currentNum = beforeNum;
-                  }
+                  currentNum = beforeNum;
                   setState(() {
                     dragFlg = true;
                   });
