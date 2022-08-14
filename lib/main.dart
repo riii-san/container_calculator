@@ -11,6 +11,16 @@ import 'config.dart';
  TODO : ゴリ押ししているレイアウトを修正
  */
 
+/*
+* currentNumの仕様
+* ・入力した数字を格納する変数
+* ・四則演算が押下された場合はクリアする
+* →クリアするのは画面描画後
+* ・四則演算を押下して保存済みのコンテナをクリックした時、すなわちbeforeNum ≠ null & currentNum = 0のとき、currentNumに一時的にbeforeNumの値を格納
+* →コンテナを計算結果エリア以外に置いた場合はcurrentNumにbeforeNumの値を入れておく
+*
+* */
+
 void main() {
   runApp(const MyApp());
 }
@@ -52,9 +62,6 @@ String currentOperator = "";
 
 // フリー座標の個別インスタンス
 Cont? _cont;
-
-// コンテナドラッグ中に一時的に保存するContクラスのインスタンス
-Cont? _tempCont;
 
 // コンテナドラッグ中に選択したlistの要素数を格納する番号
 int currentSelectArrayNum = 0;
@@ -150,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
     void _setOperator(String receiveOpe){
       currentOperator = receiveOpe;
       beforeNum = currentNum;
-      //currentNum = 0;
+      currentNum = 0;
     }
 
     // =が押された時に演算処理を実施
@@ -607,7 +614,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // +/-ボタン TODO : ボタン押された時の処理実装
+          // √ボタン TODO : ボタン押された時の処理実装
           Positioned(
             top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 1 + _containerSize * 1,
@@ -626,7 +633,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.blue.shade300
                 ),
-                child: const Text('+/-',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: const Text('√',style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
             ),
           ),
@@ -728,6 +735,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _cont = Cont(offset,currentNum);
                   tempList.add(_cont!);
                   currentNum = 0;
+                  beforeNum = 0;
                 });
               },
             ),
@@ -774,15 +782,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     currentNum = data.num;
                     tempList.removeAt(currentSelectArrayNum);
                     _executeCalc();
+                    currentOperator = "";
                   });
                 },
               ),
-
             )
               : Container(),
-
-
-
 
           // 保存した結果を表示する領域
           for(int j = 0; j < tempList.length; j++)
@@ -820,9 +825,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 childWhenDragging: Container(),
                 // ドラッグ開始
                 onDragStarted: (){
-                  // リストの一番後ろに持ってくる
                   currentSelectArrayNum = j;
-                  _tempCont = tempList[j];
+                  if(currentOperator != ""){
+                    currentNum = beforeNum;
+                  }
                   setState(() {
                     dragFlg = true;
                   });
