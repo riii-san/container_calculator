@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'data.class.dart';
 import 'config.dart';
+import 'dart:math';
+
 
 /*
  TODO : 0.0 → 0 一次対策のみ完了
- TODO : =を連打した時の処理
- TODO : +/- , %
+ TODO : √ , % , .
  TODO : 過去の計算結果を削除
- TODO : 過去の計算結果を反映
  TODO : ゴリ押ししているレイアウトを修正
  */
 
@@ -148,10 +148,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // ACを押した時に全ての値をクリア
     void _clearAllParameter(){
-      currentNum = 0;
-      beforeNum = 0;
-      currentOperator = "";
-      setState(() {});
+      setState(() {
+        currentNum = 0;
+        beforeNum = 0;
+        currentOperator = "";
+      });
+    }
+
+    // %を押した時の計算処理
+    //  / 100
+    void _inputPercent(){
+      setState(() {
+        currentNum = currentNum / 100;
+      });
+    }
+
+    // √を押した時の計算処理
+    // 平方根
+    void _inputSqrt(){
+      setState(() {
+        currentNum = sqrt(currentNum);
+      });
     }
 
     // 演算子を押した時に=が押された時のために各変数に値を格納しておく
@@ -618,7 +635,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // √ボタン TODO : ボタン押された時の処理実装
+          // √ボタン
           Positioned(
             top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 1 + _containerSize * 1,
@@ -626,7 +643,9 @@ class _MyHomePageState extends State<MyHomePage> {
             height: _containerSize,
             child: SizedBox(
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  _inputSqrt();
+                },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
@@ -641,7 +660,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // %ボタン TODO : ボタン押された時の処理実装
+          // %ボタン
           Positioned(
             top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 2 + _containerSize * 2,
@@ -649,7 +668,9 @@ class _MyHomePageState extends State<MyHomePage> {
             height: _containerSize,
             child: SizedBox(
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  _inputPercent();
+                },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
