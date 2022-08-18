@@ -88,6 +88,18 @@ late double _space;
 // コンテナ一番サイドのスペース
 late double _sideSpace;
 
+// 足し算
+const String addition = "addition";
+
+// 引き算
+const String subtraction = "subtraction";
+
+// 掛け算
+const String multiplication = "multiplication";
+
+// 割り算
+const String division = "division";
+
 // ドラッグ中かどうかを判定するフラグ
 bool dragFlg = false;
 
@@ -105,18 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    // 足し算
-    const String addition = "addition";
-
-    // 引き算
-    const String subtraction = "subtraction";
-
-    // 掛け算
-    const String multiplication = "multiplication";
-
-    // 割り算
-    const String division = "division";
 
     _deviceWidth = MediaQuery.of(context).size.width;
     // 画面の縦サイズを定義
@@ -175,9 +175,9 @@ class _MyHomePageState extends State<MyHomePage> {
     void _setOperator(String receiveOpe){
       setState(() {
         currentOperator = receiveOpe;
+        beforeNum = currentNum;
+        currentNum = 0;
       });
-      beforeNum = currentNum;
-      currentNum = 0;
     }
 
     // =が押された時に演算処理を実施
@@ -851,8 +851,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 childWhenDragging: Container(),
                 // ドラッグ開始
                 onDragStarted: (){
+                  if(beforeNum != 0){
+
+                  }
                   currentSelectArrayNum = j;
-                  currentNum = beforeNum;
                   setState(() {
                     dragFlg = true;
                   });
