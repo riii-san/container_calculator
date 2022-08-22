@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'data.class.dart';
 import 'config.dart';
 import 'dart:math';
 
@@ -48,17 +47,41 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-// 現在の数字を格納
-double currentNum = 0;
+// 表示ラベルの上書き
+bool currentNumOverWriteFlg = true;
 
-// 演算中に前の数字を格納
-double beforeNum = 0;
+// .ドットの有無判定
+bool dotFlg = false;
 
-// 現在表示中の数字を格納
-double currentViewNum = 0;
+// 現在入力中の数字(文字列型)
+String strCurrentNum = "";
 
-// 現在選択中の演算子を格納
-String currentOperator = "";
+// 現在入力中の数字をdouble型に格納する変数
+double dbCurrentNum = 0;
+
+// ラベルの数字をプールする変数
+double numPool = 0;
+
+// 列挙子
+enum MarksType{
+  // ignore: constant_identifier_names
+  NON,
+  // ignore: constant_identifier_names
+  PLUS,
+  // ignore: constant_identifier_names
+  MINUS,
+  // ignore: constant_identifier_names
+  MULTIPLIED,
+  // ignore: constant_identifier_names
+  DEVIDED,
+  // ignore: constant_identifier_names
+  PERCENT,
+  // ignore: constant_identifier_names
+  SQRT
+}
+
+// 列挙状態の初期値
+MarksType mType = MarksType.NON;
 
 // フリー座標の個別インスタンス
 Cont? _cont;
@@ -67,13 +90,7 @@ Cont? _cont;
 int currentSelectArrayNum = 0;
 
 // debug
-List<Cont> tempList = [];
-
-// 保存している数字を格納
-List<data> storeNum = [];
-
-// ループ変数
-int i = 0;
+List<Cont> contList = [];
 
 // デバイスの横サイズ
 late double _deviceWidth;
@@ -88,25 +105,45 @@ late double _space;
 // コンテナ一番サイドのスペース
 late double _sideSpace;
 
-// 足し算
-const String addition = "addition";
-
-// 引き算
-const String subtraction = "subtraction";
-
-// 掛け算
-const String multiplication = "multiplication";
-
-// 割り算
-const String division = "division";
-
 // ドラッグ中かどうかを判定するフラグ
 bool dragFlg = false;
 
 // containerButton要素を格納するリスト
 List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5','6','*','7','8','9','÷','AC','√','％','C'];
 
-
+// 演算処理
+void _exeCalculate(){
+  dbCurrentNum = double.parse(strCurrentNum);
+  switch(mType)
+  {
+    case MarksType.NON:
+      numPool = dbCurrentNum;
+      break;
+    case MarksType.PLUS:
+      numPool += dbCurrentNum;
+      break;
+    case MarksType.MINUS:
+      numPool -= dbCurrentNum;
+      break;
+    case MarksType.MULTIPLIED:
+      numPool *= dbCurrentNum;
+      break;
+    case MarksType.DEVIDED:
+      numPool /= dbCurrentNum;
+      break;
+    case MarksType.PERCENT:
+      numPool = dbCurrentNum * 0.01;
+      break;
+    case MarksType.SQRT:
+      numPool = sqrt(dbCurrentNum);
+      break;
+  }
+  strCurrentNum = numPool.toString();
+  // .ドット表示をするかどうかを判定
+  if(strCurrentNum.substring(strCurrentNum.length-2,strCurrentNum.length) == '.0'){
+    strCurrentNum = strCurrentNum.substring(0,strCurrentNum.length-2);
+  }
+}
 
 class _MyHomePageState extends State<MyHomePage> {
 
@@ -130,80 +167,94 @@ class _MyHomePageState extends State<MyHomePage> {
     // コンテナ一番サイドのスペース
     _sideSpace = _deviceWidth * 0.125 / 2;
 
-    // 数字入力した時に現在の数字に反映する
-    void _inputNum(int num){
+
+    // 0~9の数字が押された時の処理
+    void _numClick(String num){
       setState(() {
-        currentNum *= 10;
-        currentNum += num;
+        if(currentNumOverWriteFlg){
+          strCurrentNum = num;
+          if(strCurrentNum != '0'){
+            currentNumOverWriteFlg = false;
+          }
+        }
+        else{
+          strCurrentNum += num;
+        }
       });
     }
 
-    // Cを押した時に現在入力されている数字をクリア
-    void _clearCurrentNum(){
+    // Cが押された時の処理
+    void _clearClick(){
       setState(() {
-        beforeNum = 0;
-        currentNum = 0;
+        strCurrentNum = '0';
+        currentNumOverWriteFlg = true;
+        dotFlg = false;
       });
     }
 
-    // ACを押した時に全ての値をクリア
-    void _clearAllParameter(){
+    // ACが押された時の処理
+    void _allClearClick(){
       setState(() {
-        currentNum = 0;
-        beforeNum = 0;
-        currentOperator = "";
+        strCurrentNum = '0';
+        dbCurrentNum = 0;
+        currentNumOverWriteFlg = true;
+        dotFlg = false;
+        numPool = 0;
+        mType = MarksType.NON;
       });
     }
 
-    // %を押した時の計算処理
-    //  / 100
-    void _inputPercent(){
+    // .ドットボタンが押された時の処理
+    void _dotClick(){
       setState(() {
-        currentNum = currentNum / 100;
+        if(!dotFlg){
+          strCurrentNum += '.';
+          dotFlg = true;
+          currentNumOverWriteFlg = false;
+        }
       });
     }
 
-    // √を押した時の計算処理
-    // 平方根
-    void _inputSqrt(){
+    // + , - , * , ÷ が押された時の処理
+    void _operatorClick(MarksType type){
       setState(() {
-        currentNum = sqrt(currentNum);
+        dotFlg = false;
+        currentNumOverWriteFlg = true;
+        _exeCalculate();
+        mType = type;
       });
     }
 
-    // 演算子を押した時に=が押された時のために各変数に値を格納しておく
-    void _setOperator(String receiveOpe){
+    // %が押された時の処理
+    void _percentClick(){
       setState(() {
-        currentOperator = receiveOpe;
-        beforeNum = currentNum;
-        currentNum = 0;
+        dotFlg = false;
+        currentNumOverWriteFlg = true;
+        mType = MarksType.PERCENT;
+        _exeCalculate();
+        mType = MarksType.NON;
       });
     }
 
-    // =が押された時に演算処理を実施
-    void _executeCalc(){
-      switch(currentOperator){
-        // 足し算
-        case addition:
-          currentNum = beforeNum + currentNum;
-          setState(() {});
-          break;
-        // 引き算
-        case subtraction:
-          currentNum = beforeNum - currentNum;
-          setState(() {});
-          break;
-        // 掛け算
-        case multiplication:
-          currentNum = beforeNum * currentNum;
-          setState(() {});
-          break;
-        // 割り算
-        case division:
-          currentNum = beforeNum / currentNum;
-          setState(() {});
-          break;
-      }
+    // √が押された時の処理
+    void _sqrtClick(){
+      setState(() {
+        dotFlg = false;
+        currentNumOverWriteFlg = true;
+        mType = MarksType.SQRT;
+        _exeCalculate();
+        mType = MarksType.NON;
+      });
+    }
+
+    // =が押された時の処理
+    void _equalClick(){
+      setState(() {
+        _exeCalculate();
+        mType = MarksType.NON;
+        dotFlg = false;
+        currentNumOverWriteFlg = true;
+      });
     }
 
     return Scaffold(
@@ -218,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(0);
+                  _numClick('0');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -243,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-
+                  _dotClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -268,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _executeCalc();
+                  _equalClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -293,7 +344,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator(addition);
+                  _operatorClick(MarksType.PLUS);
                   },
                 // 未選択状態
                 style: ElevatedButton.styleFrom(
@@ -319,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(1);
+                  _numClick('1');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -344,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(2);
+                  _numClick('2');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -369,7 +420,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(3);
+                  _numClick('3');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -394,7 +445,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator(subtraction);
+                  _operatorClick(MarksType.MINUS);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -419,7 +470,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(4);
+                  _numClick('4');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -444,7 +495,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(5);
+                  _numClick('5');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -469,7 +520,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(6);
+                  _numClick('6');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -494,7 +545,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator(multiplication);
+                  _operatorClick(MarksType.MULTIPLIED);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -519,7 +570,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(7);
+                  _numClick('7');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -544,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(8);
+                  _numClick('8');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -569,7 +620,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputNum(9);
+                  _numClick('9');
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -594,7 +645,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _setOperator(division);
+                  _operatorClick(MarksType.DEVIDED);
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -619,7 +670,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _clearAllParameter();
+                  _allClearClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -644,7 +695,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputSqrt();
+                  _sqrtClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -669,7 +720,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _inputPercent();
+                  _percentClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -694,7 +745,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               child: ElevatedButton(
                 onPressed: (){
-                  _clearCurrentNum();
+                  _clearClick();
                 },
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -726,7 +777,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(currentNum.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
+                child: Text(strCurrentNum,style: const TextStyle(color: Colors.black,fontSize: 20)),
               ),
               feedback: Material(
                 child: Container(
@@ -738,7 +789,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   width: _containerSize * 4 + _space * 3,
                   height: _containerSize * 0.7,
-                  child: Text(currentNum.toString(),style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
+                  child: Text(strCurrentNum,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
                 ),
               ),
               // ドラッグ開始
@@ -757,10 +808,10 @@ class _MyHomePageState extends State<MyHomePage> {
               onDraggableCanceled: (view,offset){
                 setState(() {
                   dragFlg = false;
-                  _cont = Cont(offset,currentNum);
-                  tempList.add(_cont!);
-                  currentNum = 0;
-                  beforeNum = 0;
+                  _cont = Cont(offset,strCurrentNum);
+                  contList.add(_cont!);
+                  strCurrentNum = '0';
+                  currentNumOverWriteFlg = true;
                 });
               },
             ),
@@ -805,10 +856,11 @@ class _MyHomePageState extends State<MyHomePage> {
               },
                 onAccept: (data){
                   setState(() {
-                    currentNum = data.num;
-                    tempList.removeAt(currentSelectArrayNum);
-                    _executeCalc();
-                    currentOperator = "";
+                    strCurrentNum = data.num;
+                    contList.removeAt(currentSelectArrayNum);
+                    _exeCalculate();
+                    numPool = 0;
+                    mType = MarksType.NON;
                   });
                 },
               ),
@@ -816,12 +868,12 @@ class _MyHomePageState extends State<MyHomePage> {
               : Container(),
 
           // 保存した結果を表示する領域
-          for(int j = 0; j < tempList.length; j++)
+          for(int j = 0; j < contList.length; j++)
             Positioned(
-              left: tempList[j].pos.dx,
-              top: tempList[j].pos.dy,
+              left: contList[j].pos.dx,
+              top: contList[j].pos.dy,
               child: Draggable(
-                data: tempList[j],
+                data: contList[j],
                 feedback: Material(
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -833,7 +885,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     width: _containerSize * 4 + _space * 3,
                     height: _containerSize * 0.7,
-                    child: Text(tempList[j].num.toString(),style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
+                    child: Text(contList[j].num,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
                   ),
                 ),
                 child: Container(
@@ -846,14 +898,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   width: _containerSize * 4 + _space * 3,
                   height: _containerSize * 0.7,
-                  child: Text(tempList[j].num.toString(),style: const TextStyle(color: Colors.black,fontSize: 20)),
+                  child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 20)),
                 ),
                 childWhenDragging: Container(),
                 // ドラッグ開始
                 onDragStarted: (){
-                  if(beforeNum != 0){
-
-                  }
                   currentSelectArrayNum = j;
                   setState(() {
                     dragFlg = true;
@@ -868,7 +917,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // DragTarget以外に置かれた場合、その座標に移動
                 onDraggableCanceled: (view, offset) {
                   setState(() {
-                    tempList[currentSelectArrayNum].pos = offset;
+                    contList[currentSelectArrayNum].pos = offset;
                     dragFlg = false;
                   });
                 },

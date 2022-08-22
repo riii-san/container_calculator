@@ -17,9 +17,9 @@ class Config{
 
 class Cont{
   late Offset pos;
-  late double num;
+  late String num;
 
-  Cont(Offset createPos,double number){
+  Cont(Offset createPos,String number){
     pos = createPos;
     num = number;
   }
