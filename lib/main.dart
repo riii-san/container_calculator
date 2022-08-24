@@ -54,7 +54,7 @@ bool currentNumOverWriteFlg = true;
 bool dotFlg = false;
 
 // 現在入力中の数字(文字列型)
-String strCurrentNum = "";
+String strCurrentNum = "0";
 
 // 現在入力中の数字をdouble型に格納する変数
 double dbCurrentNum = 0;
@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
     void _equalClick(){
       setState(() {
         _exeCalculate();
-        mType = MarksType.NON;
+        //mType = MarksType.NON;
         dotFlg = false;
         currentNumOverWriteFlg = true;
       });
@@ -827,11 +827,12 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _deviceHeight * 0.7,
               child: DragTarget(builder: (context, accepted, rejected) {
                 return Container(
-                  // TODO : 塗りつぶし消す
+                  /*
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.greenAccent),
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey.withOpacity(0.5)),
+                   */
                 );
               },
               ),
@@ -866,6 +867,34 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             )
               : Container(),
+
+          // 削除アイコンを表示
+          dragFlg ?
+            Positioned(
+              top: _bannerHeight * 0.7,
+              left: _deviceWidth * 0.45,
+              width: _deviceWidth * 0.1,
+              height: _deviceWidth * 0.1,
+              child: DragTarget<Cont>(builder: (context, accepted, rejected) {
+                return Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.grey,
+                      shape: BoxShape.circle
+                  ),
+                  child: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.white,
+                  ),
+                );
+              },
+                onAccept: (data){
+                  setState(() {
+                    contList.removeAt(currentSelectArrayNum);
+                  });
+                },
+              ),
+            )
+                : Container(),
 
           // 保存した結果を表示する領域
           for(int j = 0; j < contList.length; j++)
