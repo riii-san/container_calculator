@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white
       ),
       home: const MyHomePage(title: 'container calculator'),
     );
@@ -92,6 +93,12 @@ late double _sideSpace;
 // ドラッグ中かどうかを判定するフラグ
 bool dragFlg = false;
 
+// 入力中のコンテナにドラッグ可能かどうかを判定するフラグ
+bool dropCurrentContainerFlg = false;
+
+// 削除アイコンにドラッグ可能かどうかを判定するフラグ
+bool dropDeleteFlg = false;
+
 // 入力したダイアログの値を一時保持する変数
 TextEditingController labelTextController = TextEditingController();
 
@@ -137,6 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState(){
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
   }
 
   @override
@@ -760,7 +772,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(10),
                 alignment: Alignment.centerRight,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
+                  color: dropCurrentContainerFlg ? Colors.grey.shade300 : Colors.white,
+                  border: Border.all(color: dropCurrentContainerFlg ? Colors.lightGreenAccent :  Colors.grey),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(strCurrentNum,style: const TextStyle(color: Colors.black,fontSize: 20)),
@@ -803,7 +816,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
 
-          // 各ボタン配置ゾーン
+          // 各ボタン配置ゾーンのDragTarget
           // ドラッグ中のみオン
           dragFlg ?
             Positioned(
@@ -812,20 +825,13 @@ class _MyHomePageState extends State<MyHomePage> {
               width: _deviceWidth,
               height: _deviceHeight * 0.7,
               child: DragTarget(builder: (context, accepted, rejected) {
-                return Container(
-                  /*
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.greenAccent),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.5)),
-                   */
-                );
-              },
-              ),
+                return Container();
+              }),
             )
           : Container(),
 
-          // 現在の計算結果を格納するコンテナ
+          // 現在の計算結果を格納するコンテナのDragTarget
+          // 保存したコンテナがドロップ可能になった時にドラッグ中の色を変更するフラグを更新する
           dragFlg ?
             Positioned(
               top: _containerSize * 3.75,
@@ -833,13 +839,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: _containerSize * 4 + _space * 3,
               height: _containerSize * 0.7,
               child: DragTarget<Cont>(builder: (context, accepted, rejected) {
-                return Container(
-                  // TODO : 塗りつぶし消す
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.greenAccent),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.5)),
-                );
+                return Container();
               },
                 onAccept: (data){
                   setState(() {
@@ -848,6 +848,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     _exeCalculate();
                     numPool = 0;
                     mType = MarksType.NON;
+                    dropCurrentContainerFlg = false;
+                  });
+                },
+                onWillAccept: (data){
+                  setState(() {
+                    dropCurrentContainerFlg = true;
+                  });
+                  return true;
+                },
+                onLeave: (data){
+                  setState(() {
+                    dropCurrentContainerFlg = false;
                   });
                 },
               ),
@@ -863,19 +875,30 @@ class _MyHomePageState extends State<MyHomePage> {
               height: _deviceWidth * 0.1,
               child: DragTarget<Cont>(builder: (context, accepted, rejected) {
                 return Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.grey,
+                  decoration: BoxDecoration(
+                      color: dropDeleteFlg ? Colors.grey : Colors.white,
                       shape: BoxShape.circle
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.delete_forever,
-                    color: Colors.white,
+                    color: dropDeleteFlg ? Colors.white : Colors.grey,
                   ),
                 );
               },
                 onAccept: (data){
                   setState(() {
                     contList.removeAt(currentSelectArrayNum);
+                  });
+                },
+                onWillAccept: (data){
+                  setState(() {
+                    dropDeleteFlg = true;
+                  });
+                  return true;
+                },
+                onLeave: (data){
+                  setState(() {
+                    dropDeleteFlg = false;
                   });
                 },
               ),
@@ -894,30 +917,38 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: _containerSize * 4 + _space * 3,
                     height: _containerSize * 0.7,
                     color: Colors.white,
-                    // containerに枠線とラベルを追加する
-                    child: InputDecorator(
+                    // ドラッグ可能な場合は枠線の色を変える
+                    child : InputDecorator(
                       decoration: InputDecoration(
                           labelText: contList[j].labelText,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          labelStyle: TextStyle(
+                              color: dropCurrentContainerFlg ? Colors.red :  Colors.grey.shade300,
+                              fontSize: 20
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              )
                           )
                       ),
                       child: Container(
                         alignment: Alignment.centerRight,
-                        child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 18)),
+                        child: Text(contList[j].num,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 18)),
                       ),
-                    ),
+                    )
                   ),
                 ),
                 child: GestureDetector(
                   onTap: () {
+                    labelTextController.text = contList[j].labelText;
                     showDialog(
                         context: context,
                         barrierDismissible: true,
                         builder: (context){
                           return CupertinoAlertDialog(
                             title: const Text('Input Label Text'),
-                            content: CupertinoTextField(controller: labelTextController),
+                            content: CupertinoTextField(controller: labelTextController,autofocus: true,),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -947,8 +978,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: contList[j].labelText,
-                        border: OutlineInputBorder(
+                        labelStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20
+                        ),
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.grey
+                          )
                         )
                       ),
                         child: Container(
