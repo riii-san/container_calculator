@@ -18,9 +18,11 @@ class Config{
 class Cont{
   late Offset pos;
   late String num;
+  late String labelText;
 
   Cont(Offset createPos,String number){
     pos = createPos;
     num = number;
+    labelText = "";
   }
 }

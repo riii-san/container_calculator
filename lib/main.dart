@@ -1,24 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'dart:math';
-
-
-/*
- TODO : 0.0 → 0 一次対策のみ完了
- TODO : √ , % , .
- TODO : 過去の計算結果を削除
- TODO : ゴリ押ししているレイアウトを修正
- */
-
-/*
-* currentNumの仕様
-* ・入力した数字を格納する変数
-* ・四則演算が押下された場合はクリアする
-* →クリアするのは画面描画後
-* ・四則演算を押下して保存済みのコンテナをクリックした時、すなわちbeforeNum ≠ null & currentNum = 0のとき、currentNumに一時的にbeforeNumの値を格納
-* →コンテナを計算結果エリア以外に置いた場合はcurrentNumにbeforeNumの値を入れておく
-*
-* */
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -108,6 +92,9 @@ late double _sideSpace;
 // ドラッグ中かどうかを判定するフラグ
 bool dragFlg = false;
 
+// 入力したダイアログの値を一時保持する変数
+TextEditingController labelTextController = TextEditingController();
+
 // containerButton要素を格納するリスト
 List<String> containerButtonCharacter = ['0','.','=','+','1','2','3','-','4','5','6','*','7','8','9','÷','AC','√','％','C'];
 
@@ -166,7 +153,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _space = _deviceWidth * 0.025;
     // コンテナ一番サイドのスペース
     _sideSpace = _deviceWidth * 0.125 / 2;
-
 
     // 0~9の数字が押された時の処理
     void _numClick(String num){
@@ -905,29 +891,72 @@ class _MyHomePageState extends State<MyHomePage> {
                 data: contList[j],
                 feedback: Material(
                   child: Container(
-                    padding: const EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white
-                    ),
                     width: _containerSize * 4 + _space * 3,
                     height: _containerSize * 0.7,
-                    child: Text(contList[j].num,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
+                    color: Colors.white,
+                    // containerに枠線とラベルを追加する
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                          labelText: contList[j].labelText,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )
+                      ),
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 18)),
+                      ),
+                    ),
                   ),
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.centerRight,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(10),
-                      color: Colors.white
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context){
+                          return CupertinoAlertDialog(
+                            title: const Text('Input Label Text'),
+                            content: CupertinoTextField(controller: labelTextController),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel',style: TextStyle(color: Colors.red),),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    contList[j].labelText = labelTextController.text;
+                                    labelTextController.text = "";
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  },
+                  child: Container(
+                    width: _containerSize * 4 + _space * 3,
+                    height: _containerSize * 0.7,
+                    color: Colors.white,
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: contList[j].labelText,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )
+                      ),
+                        child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 18)),
+                        ),
+                    ),
                   ),
-                  width: _containerSize * 4 + _space * 3,
-                  height: _containerSize * 0.7,
-                  child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 20)),
                 ),
                 childWhenDragging: Container(),
                 // ドラッグ開始
