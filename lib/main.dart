@@ -81,6 +81,14 @@ List<Cont> contList = [];
 late double _deviceWidth;
 // デバイスの縦サイズ
 late double _deviceHeight;
+// 電卓ボタンの文字サイズ
+late double _buttonFontSize;
+// 現在数字の文字サイズ
+late double _currentNumFontSize;
+// 保存コンテナの数字文字サイズ
+late double _storeContainerNumFontSize;
+// 保存コンテナのラベル文字サイズ
+late double _storeContainerLabelFontSize;
 // コンテナの1辺の長さ
 late double _containerSize;
 // バナー広告の大きさ
@@ -92,6 +100,9 @@ late double _sideSpace;
 
 // ドラッグ中かどうかを判定するフラグ
 bool dragFlg = false;
+
+// 保存した結果がドラッグ中かどうか
+bool dragStoreFlg = false;
 
 // 入力中のコンテナにドラッグ可能かどうかを判定するフラグ
 bool dropCurrentContainerFlg = false;
@@ -133,6 +144,7 @@ void _exeCalculate(){
       break;
   }
   strCurrentNum = numPool.toString();
+  mType = MarksType.NON;
   // .ドット表示をするかどうかを判定
   if(strCurrentNum.substring(strCurrentNum.length-2,strCurrentNum.length) == '.0'){
     strCurrentNum = strCurrentNum.substring(0,strCurrentNum.length-2);
@@ -157,6 +169,16 @@ class _MyHomePageState extends State<MyHomePage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     // 画面の縦サイズを定義
     _deviceHeight = MediaQuery.of(context).size.height;
+
+    // 電卓ボタンの文字サイズ 20
+    _buttonFontSize = _deviceWidth / 20.7;
+    // 現在数字の文字サイズ 20
+    _currentNumFontSize = _deviceWidth / 20.7;
+    // 保存コンテナの数字文字サイズ 18
+    _storeContainerNumFontSize = _deviceWidth / 23;
+    // 保存コンテナのラベル文字サイズ 20
+    _storeContainerLabelFontSize = _deviceWidth / 20.7;
+
     // コンテナの1辺の長さ
     _containerSize = _deviceWidth * 0.2;
     // バナー広告の大きさ
@@ -168,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // 0~9の数字が押された時の処理
     void _numClick(String num){
+      print(_deviceWidth);
       setState(() {
         if(currentNumOverWriteFlg){
           strCurrentNum = num;
@@ -279,7 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('0',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('0',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -304,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('.',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('.',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -329,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('=',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('=',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -355,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.indigo
                 ),
-                child: const Text('+',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('+',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               )
             ),
           ),
@@ -380,7 +403,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('1',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('1',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -405,7 +428,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('2',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('2',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -430,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('3',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('3',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -455,7 +478,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.indigo
                 ),
-                child: const Text('-',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('-',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -480,7 +503,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('4',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('4',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -505,7 +528,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('5',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('5',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -530,7 +553,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('6',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('6',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -555,7 +578,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.indigo
                 ),
-                child: const Text('×',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('×',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -580,7 +603,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('7',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('7',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -605,7 +628,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('8',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('8',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -630,7 +653,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.white
                 ),
-                child: const Text('9',style: TextStyle(color: Colors.black,fontSize: 20),),
+                child: Text('9',style: TextStyle(color: Colors.black,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -655,7 +678,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.indigo
                 ),
-                child: const Text('÷',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('÷',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -680,7 +703,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.blue.shade300
                 ),
-                child: const Text('AC',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('AC',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -705,7 +728,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.blue.shade300
                 ),
-                child: const Text('√',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('√',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -730,7 +753,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.blue.shade300
                 ),
-                child: const Text('%',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('%',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -755,7 +778,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     primary: Colors.blue.shade300
                 ),
-                child: const Text('C',style: TextStyle(color: Colors.white,fontSize: 20),),
+                child: Text('C',style: TextStyle(color: Colors.white,fontSize: _buttonFontSize),),
               ),
             ),
           ),
@@ -776,7 +799,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: Border.all(color: dropCurrentContainerFlg ? Colors.lightGreenAccent :  Colors.grey),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(strCurrentNum,style: const TextStyle(color: Colors.black,fontSize: 20)),
+                child: Text(strCurrentNum,style: TextStyle(color: Colors.black,fontSize: _currentNumFontSize)),
               ),
               feedback: Material(
                 child: Container(
@@ -788,7 +811,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   width: _containerSize * 4 + _space * 3,
                   height: _containerSize * 0.7,
-                  child: Text(strCurrentNum,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 20)),
+                  child: Text(strCurrentNum,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: _currentNumFontSize)),
                 ),
               ),
               // ドラッグ開始
@@ -867,7 +890,7 @@ class _MyHomePageState extends State<MyHomePage> {
               : Container(),
 
           // 削除アイコンを表示
-          dragFlg ?
+          dragStoreFlg ?
             Positioned(
               top: _bannerHeight * 0.7,
               left: _deviceWidth * 0.45,
@@ -888,6 +911,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onAccept: (data){
                   setState(() {
                     contList.removeAt(currentSelectArrayNum);
+                    dropDeleteFlg = false;
                   });
                 },
                 onWillAccept: (data){
@@ -923,7 +947,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           labelText: contList[j].labelText,
                           labelStyle: TextStyle(
                               color: dropCurrentContainerFlg ? Colors.red :  Colors.grey.shade300,
-                              fontSize: 20
+                              fontSize: _storeContainerLabelFontSize
                           ),
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -934,7 +958,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       child: Container(
                         alignment: Alignment.centerRight,
-                        child: Text(contList[j].num,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: 18)),
+                        child: Text(contList[j].num,style: TextStyle(color: Colors.black.withOpacity(0.2),fontSize: _storeContainerNumFontSize)),
                       ),
                     )
                   ),
@@ -978,9 +1002,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: contList[j].labelText,
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           color: Colors.grey,
-                          fontSize: 20
+                          fontSize: _storeContainerLabelFontSize
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -991,7 +1015,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                         child: Container(
                             alignment: Alignment.centerRight,
-                            child: Text(contList[j].num,style: const TextStyle(color: Colors.black,fontSize: 18)),
+                            child: Text(contList[j].num,style: TextStyle(color: Colors.black,fontSize: _storeContainerNumFontSize)),
                         ),
                     ),
                   ),
@@ -1002,12 +1026,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   currentSelectArrayNum = j;
                   setState(() {
                     dragFlg = true;
+                    dragStoreFlg = true;
                   });
                 },
                 // DragTargetに置かれた場合は元の位置に戻す
                 onDragCompleted: (){
                   setState(() {
                     dragFlg = false;
+                    dragStoreFlg = false;
                   });
                 },
                 // DragTarget以外に置かれた場合、その座標に移動
@@ -1015,6 +1041,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     contList[currentSelectArrayNum].pos = offset;
                     dragFlg = false;
+                    dragStoreFlg = false;
                   });
                 },
               ),
