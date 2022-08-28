@@ -1,9 +1,13 @@
+import 'package:container_calculator/services/ad_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'dart:math';
+import 'package:admob_flutter/admob_flutter.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
   runApp(const MyApp());
 }
 
@@ -177,7 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _storeContainerNumFontSize = _deviceWidth / 23;
     // 保存コンテナのラベル文字サイズ 20
     _storeContainerLabelFontSize = _deviceWidth / 20.7;
-
     // コンテナの1辺の長さ
     _containerSize = _deviceWidth * 0.2;
     // バナー広告の大きさ
@@ -189,7 +192,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // 0~9の数字が押された時の処理
     void _numClick(String num){
-      print(_deviceWidth);
       setState(() {
         if(currentNumOverWriteFlg){
           strCurrentNum = num;
@@ -280,9 +282,24 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          // バナー広告
+          Positioned(
+            top: _deviceHeight - _bannerHeight,
+            left: 0,
+            width: _deviceWidth,
+            height: _bannerHeight,
+            child: AdmobBanner(
+                adUnitId: AdHelper.bannerAdUnitId,
+                adSize: AdmobBannerSize(
+                  width: _deviceWidth.toInt(),
+                  height: _bannerHeight.toInt(),
+                  name: 'SMART_BANNER'
+                )
+            ),
+          ),
           // 0
           Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
+            top: _deviceHeight - _containerSize - _bannerHeight - _space * 1,
             left: _sideSpace,
             width: _containerSize,
             height: _containerSize,
@@ -307,7 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // .ボタン TODO : ボタン押された時の処理実装
           Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
+            top: _deviceHeight - _containerSize - _bannerHeight - _space * 1,
             left: _sideSpace + _space * 1 + _containerSize * 1,
             width: _containerSize,
             height: _containerSize,
@@ -332,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // =ボタン
           Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
+            top: _deviceHeight - _containerSize - _bannerHeight - _space * 1,
             left: _sideSpace + _space * 2 + _containerSize * 2,
             width: _containerSize,
             height: _containerSize,
@@ -357,7 +374,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // +ボタン
           Positioned(
-            top: _deviceHeight - _containerSize - _bannerHeight,
+            top: _deviceHeight - _containerSize - _bannerHeight - _space * 1,
             left: _sideSpace + _space * 3 + _containerSize * 3,
             width: _containerSize,
             height: _containerSize,
@@ -383,7 +400,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 1ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 2,
             left: _sideSpace,
             width: _containerSize,
             height: _containerSize,
@@ -408,7 +425,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 2ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 2,
             left: _sideSpace + _space * 1 + _containerSize * 1,
             width: _containerSize,
             height: _containerSize,
@@ -433,7 +450,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 3ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 2,
             left: _sideSpace + _space * 2 + _containerSize * 2,
             width: _containerSize,
             height: _containerSize,
@@ -458,7 +475,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // -ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 1,
+            top: _deviceHeight - _containerSize * 2 - _bannerHeight - _space * 2,
             left: _sideSpace + _space * 3 + _containerSize * 3,
             width: _containerSize,
             height: _containerSize,
@@ -483,7 +500,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 4ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 3,
             left: _sideSpace,
             width: _containerSize,
             height: _containerSize,
@@ -508,7 +525,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 5ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 3,
             left: _sideSpace + _space * 1 + _containerSize * 1,
             width: _containerSize,
             height: _containerSize,
@@ -533,7 +550,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 6ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 3,
             left: _sideSpace + _space * 2 + _containerSize * 2,
             width: _containerSize,
             height: _containerSize,
@@ -558,7 +575,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // ×ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 2,
+            top: _deviceHeight - _containerSize * 3 - _bannerHeight - _space * 3,
             left: _sideSpace + _space * 3 + _containerSize * 3,
             width: _containerSize,
             height: _containerSize,
@@ -583,7 +600,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 7ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 4,
             left: _sideSpace,
             width: _containerSize,
             height: _containerSize,
@@ -608,7 +625,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 8ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 1 + _containerSize * 1,
             width: _containerSize,
             height: _containerSize,
@@ -633,7 +650,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // 9ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 2 + _containerSize * 2,
             width: _containerSize,
             height: _containerSize,
@@ -658,7 +675,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // ÷ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 3,
+            top: _deviceHeight - _containerSize * 4 - _bannerHeight - _space * 4,
             left: _sideSpace + _space * 3 + _containerSize * 3,
             width: _containerSize,
             height: _containerSize,
@@ -683,7 +700,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // ACボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 5,
             left: _sideSpace,
             width: _containerSize,
             height: _containerSize,
@@ -708,7 +725,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // √ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 5,
             left: _sideSpace + _space * 1 + _containerSize * 1,
             width: _containerSize,
             height: _containerSize,
@@ -733,7 +750,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // %ボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 5,
             left: _sideSpace + _space * 2 + _containerSize * 2,
             width: _containerSize,
             height: _containerSize,
@@ -758,7 +775,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           // Cボタン
           Positioned(
-            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 4,
+            top: _deviceHeight - _containerSize * 5 - _bannerHeight - _space * 5,
             left: _sideSpace + _space * 3 + _containerSize * 3,
             width: _containerSize,
             height: _containerSize,
@@ -784,7 +801,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
           // ボタンを押下した結果を格納するコンテナ
           Positioned(
-            top: _deviceHeight - _containerSize * 5.7 - _bannerHeight - _space * 5,
+            top: _deviceHeight - _containerSize * 5.7 - _bannerHeight - _space * 6,
             left: _sideSpace,
             width: _containerSize * 4 + _space * 3,
             height: _containerSize * 0.7,
@@ -842,7 +859,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // ドラッグ中のみオン
           dragFlg ?
             Positioned(
-              top: _containerSize * 4.5,
+              top: _containerSize * 4.5  - _space * 1,
               left: 0,
               width: _deviceWidth,
               height: _deviceHeight * 0.7,
@@ -856,7 +873,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // 保存したコンテナがドロップ可能になった時にドラッグ中の色を変更するフラグを更新する
           dragFlg ?
             Positioned(
-              top: _containerSize * 3.75,
+              top: _containerSize * 3.75  - _space * 1,
               left: _sideSpace,
               width: _containerSize * 4 + _space * 3,
               height: _containerSize * 0.7,
