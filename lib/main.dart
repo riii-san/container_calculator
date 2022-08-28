@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'dart:math';
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 
 void main() {
   runApp(const MyApp());
