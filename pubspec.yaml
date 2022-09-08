@@ -36,6 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   adaptive_dialog: ^1.6.3
   admob_flutter: ^2.0.0
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +54,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -58,6 +65,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

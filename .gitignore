@@ -49,3 +49,6 @@ app.*.map.json
 ad_helper.dart
 Podfile.lock
 project.pbxproj
+
+en.lproj
+ja.lproj

@@ -283,6 +283,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: <Widget>[
           // バナー広告
+
+          /*
           Positioned(
             top: _deviceHeight - _bannerHeight,
             left: 0,
@@ -297,6 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
             ),
           ),
+           */
           // 0
           Positioned(
             top: _deviceHeight - _containerSize - _bannerHeight - _space * 1,
